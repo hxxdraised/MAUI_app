@@ -13,22 +13,6 @@ import Spinner from './components/Spinner';
 import Login from './components/Login';
 import Home from './components/Home';
 
-// import {ThemeProvider} from '../theme';
-
-// function App(): React.JSX.Element {
-//   return (
-//     <ThemeProvider
-//       seedColor="auto"
-//       colorScheme="auto"
-//       fallbackColor="#1b6ef3"
-//       generationStyle="TONAL_SPOT">
-//       <PageLayout>
-//         <Home />
-//       </PageLayout>
-//     </ThemeProvider>
-//   );
-// }
-
 const App = (): React.JSX.Element => {
   const authContext = useContext(AuthContext);
   const [status, setStatus] = useState('loading');
@@ -36,13 +20,15 @@ const App = (): React.JSX.Element => {
   const loadJWT = useCallback(async () => {
     try {
       const value = await Keychain.getGenericPassword();
-      const jwt = JSON.parse(value.password);
+      if (value) {
+        const jwt = JSON.parse(value.password);
 
-      authContext!.setAuthState({
-        accessToken: jwt.accessToken || null,
-        authenticated: jwt.accessToken !== null,
-      });
-      setStatus('success');
+        authContext!.setAuthState({
+          accessToken: jwt.accessToken || null,
+          authenticated: jwt.accessToken !== null,
+        });
+        setStatus('success');
+      }
     } catch (error: any) {
       setStatus('error');
       console.log(`Keychain Error: ${error.message}`);
