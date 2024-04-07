@@ -1,10 +1,14 @@
-import React from 'react';
-import {ScrollView, Text} from 'react-native';
+import React, {Context, useContext, useState} from 'react';
+import {Button, ScrollView, Text, View} from 'react-native';
 
 import {useMaterialYouTheme} from '../../theme';
+import {AuthContext} from '../context/AuthContext';
+import {IAuthContext} from '../context/types';
 
 function Home(): React.JSX.Element {
   const theme = useMaterialYouTheme();
+  const authContext = useContext(AuthContext as Context<IAuthContext>);
+
   return (
     <>
       <ScrollView
@@ -13,9 +17,14 @@ function Home(): React.JSX.Element {
           paddingTop: 20,
           paddingBottom: 40,
         }}>
-        <Text style={{color: theme.text}}>Recommended for you</Text>
-        <Text style={{color: theme.text}}>Recommended for you</Text>
-        <Text style={{color: theme.text}}>Recommended for you</Text>
+        <Text style={{color: theme.text, paddingBottom: 100, paddingTop: 100}}>
+          Authorized succsessfully
+        </Text>
+        <Button
+          title="Log out"
+          onPress={() => authContext.logout()}
+          color={theme.card}
+        />
       </ScrollView>
     </>
   );

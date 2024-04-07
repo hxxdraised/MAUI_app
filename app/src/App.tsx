@@ -5,24 +5,80 @@
  * @format
  */
 
-import React from 'react';
-
-import {ThemeProvider} from '../theme';
-import Home from './components/Home';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
+import * as Keychain from 'react-native-keychain';
 import PageLayout from './components/PageLayout';
+import {AuthContext} from './context/AuthContext';
+import Spinner from './components/Spinner';
+import Login from './components/Login';
+import Home from './components/Home';
 
-function App(): React.JSX.Element {
-  return (
-    <ThemeProvider
-      seedColor="auto"
-      colorScheme="auto"
-      fallbackColor="#1b6ef3"
-      generationStyle="TONAL_SPOT">
+// import {ThemeProvider} from '../theme';
+
+// function App(): React.JSX.Element {
+//   return (
+//     <ThemeProvider
+//       seedColor="auto"
+//       colorScheme="auto"
+//       fallbackColor="#1b6ef3"
+//       generationStyle="TONAL_SPOT">
+//       <PageLayout>
+//         <Home />
+//       </PageLayout>
+//     </ThemeProvider>
+//   );
+// }
+
+const App = (): React.JSX.Element => {
+  const authContext = useContext(AuthContext);
+  const [status, setStatus] = useState('loading');
+
+  const loadJWT = useCallback(async () => {
+    try {
+      const value = await Keychain.getGenericPassword();
+      const jwt = JSON.parse(value.password);
+
+      authContext!.setAuthState({
+        accessToken: jwt.accessToken || null,
+        authenticated: jwt.accessToken !== null,
+      });
+      setStatus('success');
+    } catch (error: any) {
+      setStatus('error');
+      console.log(`Keychain Error: ${error.message}`);
+      authContext!.setAuthState({
+        accessToken: null,
+        authenticated: false,
+      });
+    }
+  }, [authContext]);
+
+  useEffect(() => {
+    loadJWT();
+  }, [loadJWT]);
+
+  if (status === 'loading') {
+    return (
       <PageLayout>
+        <Spinner />
+      </PageLayout>
+    );
+  }
+
+  if (authContext?.authState?.authenticated === false) {
+    return (
+      <PageLayout>
+        <Login />
+      </PageLayout>
+    );
+  } else {
+    return (
+      <PageLayout>
+        {/* <Dashboard /> */}
         <Home />
       </PageLayout>
-    </ThemeProvider>
-  );
-}
+    );
+  }
+};
 
 export default App;
