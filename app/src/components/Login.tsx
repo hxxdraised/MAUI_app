@@ -4,14 +4,7 @@ import {AuthContext} from '../context/AuthContext';
 import * as Keychain from 'react-native-keychain';
 import {AxiosContext} from '../context/AxiosContext';
 import {IAuthContext, IAxiosContext} from '../context/types';
-import {
-  Appbar,
-  TextInput,
-  Button,
-  Portal,
-  Dialog,
-  Text,
-} from 'react-native-paper';
+import {TextInput, Button, Portal, Dialog, Text} from 'react-native-paper';
 
 const Login = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
@@ -51,13 +44,15 @@ const Login = (): React.JSX.Element => {
 
   return (
     <SafeAreaView>
-      <Appbar.Header mode="center-aligned">
-        <Appbar.Content title="Log in account" />
-      </Appbar.Header>
       <View style={styles.form}>
+        <Text style={styles.title} variant="titleLarge">
+          Log in account
+        </Text>
         <TextInput
           style={styles.input}
           label="E-mail"
+          textContentType="emailAddress"
+          placeholder="Your e-mail address"
           keyboardType="email-address"
           autoCapitalize="none"
           onChangeText={text => setEmail(text)}
@@ -66,6 +61,8 @@ const Login = (): React.JSX.Element => {
         <TextInput
           style={styles.input}
           label="Password"
+          textContentType="password"
+          placeholder="Your password"
           secureTextEntry={passwordSecureEntry}
           onChangeText={text => setPassword(text)}
           value={password}
@@ -103,11 +100,14 @@ const Login = (): React.JSX.Element => {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    marginBottom: 30,
+  },
   form: {
     width: '90%',
     margin: '5%',
     height: '100%',
-    paddingTop: '40%',
+    paddingTop: '25%',
   },
   input: {
     fontSize: 15,
