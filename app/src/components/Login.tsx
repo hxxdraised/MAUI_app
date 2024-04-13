@@ -94,11 +94,13 @@ const styles = StyleSheet.create({
   form: {
     width: '90%',
     margin: '5%',
+    height: '100%',
+    paddingTop: '40%',
   },
   input: {
     fontSize: 15,
     paddingBottom: 5,
-    marginBottom: 20,
+    marginBottom: 30,
   },
   button: {
     marginTop: 20,
