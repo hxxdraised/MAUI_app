@@ -2,27 +2,32 @@
  * @format
  */
 
-import React from 'react';
-import {AppRegistry} from 'react-native';
+import React, {useMemo} from 'react';
+import {AppRegistry, useColorScheme} from 'react-native';
 import App from './src/App';
 import {name as appName} from './app.json';
 import {AuthProvider} from './src/context/AuthContext';
 import {AxiosProvider} from './src/context/AxiosContext';
 import PageLayout from './src/components/PageLayout';
-import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-  },
-};
+import {useMaterial3Theme} from '@pchmn/expo-material3-theme';
+import {MD3DarkTheme, MD3LightTheme, PaperProvider} from 'react-native-paper';
 
 const Root = () => {
+  const colorScheme = useColorScheme();
+  const {theme} = useMaterial3Theme();
+
+  const paperTheme = useMemo(
+    () =>
+      colorScheme === 'dark'
+        ? {...MD3DarkTheme, colors: theme.dark}
+        : {...MD3LightTheme, colors: theme.light},
+    [colorScheme, theme],
+  );
+
   return (
     <AuthProvider>
       <AxiosProvider>
-        <PaperProvider theme={theme}>
+        <PaperProvider theme={paperTheme}>
           <PageLayout>
             <App />
           </PageLayout>
