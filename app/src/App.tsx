@@ -22,13 +22,18 @@ const App = (): React.JSX.Element => {
       const value = await Keychain.getGenericPassword();
       if (value) {
         const jwt = JSON.parse(value.password);
-
         authContext!.setAuthState({
           accessToken: jwt.accessToken || null,
           authenticated: jwt.accessToken !== null,
         });
         setStatus('success');
+        return;
       }
+      authContext!.setAuthState({
+        accessToken: null,
+        authenticated: false,
+      });
+      setStatus('success');
     } catch (error: any) {
       setStatus('error');
       console.log(`Keychain Error: ${error.message}`);
