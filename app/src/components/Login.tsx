@@ -1,15 +1,25 @@
-import {View, StyleSheet, SafeAreaView, Alert} from 'react-native';
+import {View, StyleSheet, SafeAreaView} from 'react-native';
 import React, {Context, useContext, useState} from 'react';
 import {AuthContext} from '../context/AuthContext';
 import * as Keychain from 'react-native-keychain';
 import {AxiosContext} from '../context/AxiosContext';
 import {IAuthContext, IAxiosContext} from '../context/types';
-import {Appbar, TextInput, Button} from 'react-native-paper';
+import {
+  Appbar,
+  TextInput,
+  Button,
+  Portal,
+  Dialog,
+  Text,
+} from 'react-native-paper';
 
 const Login = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordSecureEntry, setPasswordSecureEntry] = useState(false);
+
+  const [authErrorVisible, setAuthErrorVisible] = React.useState(false);
+  const [authErrorText, setAuthErrorText] = React.useState('');
 
   const authContext = useContext(AuthContext as Context<IAuthContext>);
   const {publicAxios} = useContext(AxiosContext as Context<IAxiosContext>);
@@ -34,17 +44,13 @@ const Login = (): React.JSX.Element => {
         }),
       );
     } catch (error: any) {
-      Alert.alert('Login Failed', error.response.data.message);
+      setAuthErrorText(error.response.data.message);
+      setAuthErrorVisible(true);
     }
   };
 
   return (
-    <SafeAreaView
-      style={{
-        paddingHorizontal: 20,
-        paddingTop: 20,
-        paddingBottom: 40,
-      }}>
+    <SafeAreaView>
       <Appbar.Header mode="center-aligned">
         <Appbar.Content title="Log in account" />
       </Appbar.Header>
@@ -71,26 +77,32 @@ const Login = (): React.JSX.Element => {
             />
           }
         />
-        <Button mode="contained" style={styles.button} onPress={onLogin}>
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={onLogin}
+          disabled={!email || !password}>
           Log in
         </Button>
       </View>
+      <Portal>
+        <Dialog
+          visible={authErrorVisible}
+          onDismiss={() => setAuthErrorVisible(false)}>
+          <Dialog.Title>Login Failed</Dialog.Title>
+          <Dialog.Content>
+            <Text variant="bodyMedium">{authErrorText}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setAuthErrorVisible(false)}>Ok</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: '100%',
-  },
-  logo: {
-    fontSize: 60,
-    margin: '20%',
-  },
   form: {
     width: '90%',
     margin: '5%',
