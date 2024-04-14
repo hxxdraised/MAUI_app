@@ -9,7 +9,8 @@ import {TextInput, Button, Portal, Dialog, Text} from 'react-native-paper';
 const Login = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordSecureEntry, setPasswordSecureEntry] = useState(false);
+  const [passwordSecureEntry, setPasswordSecureEntry] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [authErrorVisible, setAuthErrorVisible] = React.useState(false);
   const [authErrorText, setAuthErrorText] = React.useState('');
@@ -19,6 +20,7 @@ const Login = (): React.JSX.Element => {
 
   const onLogin = async () => {
     try {
+      setIsLoading(true);
       const response = await publicAxios.post('/auth/login', {
         email,
         password,
@@ -36,16 +38,18 @@ const Login = (): React.JSX.Element => {
           accessToken,
         }),
       );
+      setIsLoading(false);
     } catch (error: any) {
       setAuthErrorText(error.response.data.message);
       setAuthErrorVisible(true);
+      setIsLoading(false);
     }
   };
 
   return (
     <SafeAreaView>
       <View style={styles.form}>
-        <Text style={styles.title} variant="titleLarge">
+        <Text style={styles.title} variant="headlineLarge">
           Log in account
         </Text>
         <TextInput
@@ -78,7 +82,8 @@ const Login = (): React.JSX.Element => {
           mode="contained"
           style={styles.button}
           onPress={onLogin}
-          disabled={!email || !password}>
+          disabled={!email || !password}
+          loading={isLoading}>
           Log in
         </Button>
       </View>

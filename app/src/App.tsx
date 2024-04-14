@@ -9,9 +9,10 @@ import React, {useCallback, useContext, useEffect, useState} from 'react';
 import * as Keychain from 'react-native-keychain';
 import PageLayout from './components/PageLayout';
 import {AuthContext} from './context/AuthContext';
-import Spinner from './components/Spinner';
+import Spinner from './components/ui/Spinner';
 import Login from './components/Login';
 import Home from './components/Home';
+import {View} from 'react-native';
 
 const App = (): React.JSX.Element => {
   const authContext = useContext(AuthContext);
@@ -51,7 +52,9 @@ const App = (): React.JSX.Element => {
   if (status === 'loading') {
     return (
       <PageLayout>
-        <Spinner />
+        <View style={styles.loadingWrapper}>
+          <Spinner size={50} />
+        </View>
       </PageLayout>
     );
   }
@@ -65,11 +68,17 @@ const App = (): React.JSX.Element => {
   } else {
     return (
       <PageLayout>
-        {/* <Dashboard /> */}
         <Home />
       </PageLayout>
     );
   }
+};
+
+const styles = {
+  loadingWrapper: {
+    paddingTop: 100,
+    paddingBottom: 100,
+  },
 };
 
 export default App;
