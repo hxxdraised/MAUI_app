@@ -2,6 +2,7 @@ import {useCallback, useContext, useState} from 'react';
 import * as Keychain from 'react-native-keychain';
 import {AuthContext} from '../context/AuthContext';
 import {FetchStatus} from '../types';
+import {parseToken} from '../utils/parseToken';
 
 const useJWT = () => {
   const authContext = useContext(AuthContext);
@@ -12,9 +13,11 @@ const useJWT = () => {
       const value = await Keychain.getGenericPassword();
       if (value) {
         const jwt = JSON.parse(value.password);
+        const role = jwt.accessToken ? parseToken(jwt.accessToken).role : null;
         authContext!.setAuthState({
           accessToken: jwt.accessToken || null,
           authenticated: jwt.accessToken !== null,
+          role: role,
         });
         setStatus(FetchStatus.SUCCESS);
         return;
@@ -22,6 +25,7 @@ const useJWT = () => {
       authContext!.setAuthState({
         accessToken: null,
         authenticated: false,
+        role: null,
       });
       setStatus(FetchStatus.SUCCESS);
     } catch (error: any) {
@@ -30,6 +34,7 @@ const useJWT = () => {
       authContext!.setAuthState({
         accessToken: null,
         authenticated: false,
+        role: null,
       });
     }
   }, [authContext]);

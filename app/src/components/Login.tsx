@@ -5,6 +5,7 @@ import * as Keychain from 'react-native-keychain';
 import {AxiosContext} from '../context/AxiosContext';
 import {IAuthContext, IAxiosContext} from '../context/types';
 import {TextInput, Button, Portal, Dialog, Text} from 'react-native-paper';
+import {parseToken} from '../utils/parseToken';
 
 const Login = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
@@ -27,9 +28,11 @@ const Login = (): React.JSX.Element => {
       });
 
       const {accessToken} = response.data;
+      const role = accessToken ? parseToken(accessToken).role : null;
       authContext.setAuthState({
         accessToken,
         authenticated: true,
+        role,
       });
 
       await Keychain.setGenericPassword(

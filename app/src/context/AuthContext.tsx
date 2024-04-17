@@ -9,6 +9,7 @@ const AuthProvider = ({children}: PropsWithChildren): React.JSX.Element => {
   const [authState, setAuthState] = useState<IAuthState>({
     accessToken: null,
     authenticated: null,
+    role: null,
   });
 
   const logout = async () => {
@@ -16,6 +17,7 @@ const AuthProvider = ({children}: PropsWithChildren): React.JSX.Element => {
     setAuthState({
       accessToken: null,
       authenticated: false,
+      role: null,
     });
   };
 

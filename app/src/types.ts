@@ -4,6 +4,8 @@ export enum FetchStatus {
   ERROR = 'error',
 }
 
+export type UserRole = 'SUPERADMIN' | 'ADMIN' | 'USER';
+
 interface IVpnConfigInfo {
   id: string;
   name: string;
@@ -14,7 +16,7 @@ export interface IUser {
   name: string;
   createdAt: string;
   updatedAt: string;
-  role: 'SUPERADMIN' | 'ADMIN' | 'USER';
+  role: UserRole;
   avatarUrl: string;
   vpn: IVpnConfigInfo[];
 }

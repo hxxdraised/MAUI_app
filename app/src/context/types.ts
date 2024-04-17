@@ -1,9 +1,11 @@
 import {AxiosInstance} from 'axios';
 import React from 'react';
+import {UserRole} from '../types';
 
 export interface IAuthState {
   accessToken: string | null;
   authenticated: boolean | null;
+  role: UserRole | null;
 }
 
 export interface IAuthContext {
