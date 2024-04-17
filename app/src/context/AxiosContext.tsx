@@ -2,6 +2,7 @@ import React, {PropsWithChildren, createContext, useContext} from 'react';
 import axios from 'axios';
 import {AuthContext} from './AuthContext';
 import {IAxiosContext} from './types';
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
 const AxiosContext = createContext<IAxiosContext | null>(null);
 const {Provider} = AxiosContext;
@@ -29,6 +30,14 @@ const AxiosProvider = ({children}: PropsWithChildren): React.JSX.Element => {
       return Promise.reject(error);
     },
   );
+
+  const resetAuthContextOnFail = () => {
+    console.log('Failed to refresh token');
+    authContext!.logout();
+    return Promise.reject(new Error('Failed to refresh token'));
+  };
+
+  createAuthRefreshInterceptor(authAxios, resetAuthContextOnFail, {});
 
   return (
     <Provider
