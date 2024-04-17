@@ -1,3 +1,9 @@
+export enum FetchStatus {
+  LOADING = 'loading',
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+
 interface IVpnConfigInfo {
   id: string;
   name: string;

@@ -5,51 +5,25 @@
  * @format
  */
 
-import React, {useCallback, useContext, useEffect, useState} from 'react';
-import * as Keychain from 'react-native-keychain';
+import React, {useContext, useEffect} from 'react';
 import PageLayout from './components/PageLayout';
 import {AuthContext} from './context/AuthContext';
 import Spinner from './components/ui/Spinner';
 import Login from './components/Login';
 import Home from './components/Home';
 import {View} from 'react-native';
+import useJWT from './hooks/useJWT';
+import {FetchStatus} from './types';
 
 const App = (): React.JSX.Element => {
   const authContext = useContext(AuthContext);
-  const [status, setStatus] = useState('loading');
-
-  const loadJWT = useCallback(async () => {
-    try {
-      const value = await Keychain.getGenericPassword();
-      if (value) {
-        const jwt = JSON.parse(value.password);
-        authContext!.setAuthState({
-          accessToken: jwt.accessToken || null,
-          authenticated: jwt.accessToken !== null,
-        });
-        setStatus('success');
-        return;
-      }
-      authContext!.setAuthState({
-        accessToken: null,
-        authenticated: false,
-      });
-      setStatus('success');
-    } catch (error: any) {
-      setStatus('error');
-      console.log(`Keychain Error: ${error.message}`);
-      authContext!.setAuthState({
-        accessToken: null,
-        authenticated: false,
-      });
-    }
-  }, [authContext]);
+  const {status, loadJWT} = useJWT();
 
   useEffect(() => {
     loadJWT();
   }, [loadJWT]);
 
-  if (status === 'loading') {
+  if (status === FetchStatus.LOADING) {
     return (
       <PageLayout>
         <View style={styles.loadingWrapper}>
