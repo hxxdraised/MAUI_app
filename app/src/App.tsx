@@ -14,7 +14,10 @@ import Profile from './screens/Profile';
 import {View} from 'react-native';
 import useJWT from './hooks/useJWT';
 import {FetchStatus} from './types';
-import {BottomNavigation, Text} from 'react-native-paper';
+import {BottomNavigation} from 'react-native-paper';
+import AdminPanel from './screens/AdminPanel';
+import ConfigsList from './screens/ConfigsList';
+import UsersList from './screens/UsersList';
 
 const userNavigationRoutes = [
   {key: 'configs', title: 'Configs', focusedIcon: 'key'},
@@ -31,10 +34,6 @@ const App = (): React.JSX.Element => {
   const {status, loadJWT} = useJWT();
   const [sceneIndex, setSceneIndex] = React.useState(0);
 
-  const AdminPanelRoute = () => <Text>Admin panel</Text>;
-  const UsersRoute = () => <Text>Users</Text>;
-  const ConfigsRoute = () => <Text>Configs</Text>;
-
   const routes = useMemo(() => {
     return authContext?.isAdmin() || authContext?.isSuperAdmin()
       ? [...adminNavigationRoutes, ...userNavigationRoutes]
@@ -42,9 +41,9 @@ const App = (): React.JSX.Element => {
   }, [authContext]);
 
   const renderScene = BottomNavigation.SceneMap({
-    adminPanel: AdminPanelRoute,
-    users: UsersRoute,
-    configs: ConfigsRoute,
+    adminPanel: AdminPanel,
+    users: UsersList,
+    configs: ConfigsList,
     profile: Profile,
   });
 

@@ -81,7 +81,7 @@ function Profile(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 30,
-    paddingTop: 100,
+    paddingTop: 50,
   },
   title: {
     marginBottom: 50,
