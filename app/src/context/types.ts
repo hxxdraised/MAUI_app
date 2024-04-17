@@ -13,6 +13,8 @@ export interface IAuthContext {
   getAccessToken: () => string | null;
   setAuthState: React.Dispatch<IAuthState>;
   logout: () => void;
+  isAdmin: () => boolean;
+  isSuperAdmin: () => boolean;
 }
 
 export interface IAxiosContext {

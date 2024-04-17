@@ -25,6 +25,14 @@ const AuthProvider = ({children}: PropsWithChildren): React.JSX.Element => {
     return authState.accessToken;
   };
 
+  const isAdmin = () => {
+    return authState.role === 'ADMIN';
+  };
+
+  const isSuperAdmin = () => {
+    return authState.role === 'SUPERADMIN';
+  };
+
   return (
     <Provider
       value={{
@@ -32,6 +40,8 @@ const AuthProvider = ({children}: PropsWithChildren): React.JSX.Element => {
         getAccessToken,
         setAuthState,
         logout,
+        isAdmin,
+        isSuperAdmin,
       }}>
       {children}
     </Provider>

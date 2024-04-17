@@ -6,10 +6,10 @@ import {IAuthContext, IAxiosContext} from '../context/types';
 import {AxiosContext} from '../context/AxiosContext';
 import {Avatar, Badge, Button, Text, useTheme} from 'react-native-paper';
 import {IUser} from '../types';
-import Spinner from './ui/Spinner';
-import InfoMetric from './ui/InfoMetric';
+import Spinner from '../components/ui/Spinner';
+import InfoMetric from '../components/ui/InfoMetric';
 
-function Home(): React.JSX.Element {
+function Profile(): React.JSX.Element {
   const theme = useTheme();
   const authContext = useContext(AuthContext as Context<IAuthContext>);
   const {authAxios} = useContext(AxiosContext as Context<IAxiosContext>);
@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Profile;
