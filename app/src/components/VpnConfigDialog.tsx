@@ -42,7 +42,7 @@ const VpnConfigDialog = ({
             </View>
           ) : (
             <>
-              <InfoMetric label="ID" value={configData!.id} />
+              <InfoMetric label="ID" value={configData!.id} copyable />
               <InfoMetric label="Name" value={configData!.name} />
               <InfoMetric
                 label="Config name"
@@ -56,14 +56,18 @@ const VpnConfigDialog = ({
                     Config
                   </Text>
                   <QRCode
-                    size={270}
+                    size={290}
                     value={configData!.config}
                     color={theme.colors.onSurface}
                     backgroundColor={theme.colors.elevation.level0}
                   />
                 </>
               ) : (
-                <InfoMetric label="Config" value={configData!.config} />
+                <InfoMetric
+                  label="Config"
+                  value={configData!.config}
+                  copyable
+                />
               )}
             </>
           )}

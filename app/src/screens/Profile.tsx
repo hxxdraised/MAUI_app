@@ -61,7 +61,7 @@ function Profile(): React.JSX.Element {
             />
             <InfoMetric
               label="VPNs on this account"
-              value={userInfo.vpn.length}
+              value={userInfo.vpn.length.toString()}
               style={{marginBottom: 30}}
             />
             <Button mode="contained-tonal" onPress={authContext.logout}>

@@ -16,7 +16,7 @@ const ConfigsList = (): React.JSX.Element => {
   const [page, setPage] = React.useState<number>(0);
   const [totalPages, setTotalPages] = React.useState<number>(1);
   const [totalItems, setTotalItems] = React.useState<number>(0);
-  const [pageSize, setPageSize] = React.useState<number>(10);
+  const [pageSize, setPageSize] = React.useState<number>(11);
 
   const from = page * pageSize;
   const to = Math.min((page + 1) * pageSize, totalItems);
@@ -58,7 +58,7 @@ const ConfigsList = (): React.JSX.Element => {
           page={page}
           numberOfPages={totalPages}
           onPageChange={setPage}
-          label={`${from + 1}-${to} of ${items.length}`}
+          label={`${from + 1}-${to} of ${totalItems}`}
           numberOfItemsPerPage={pageSize}
           onItemsPerPageChange={setPageSize}
           showFastPaginationControls
