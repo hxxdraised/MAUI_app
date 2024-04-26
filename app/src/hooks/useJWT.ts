@@ -37,7 +37,8 @@ const useJWT = () => {
         role: null,
       });
     }
-  }, [authContext]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {status, loadJWT};
 };
