@@ -80,10 +80,11 @@ function Profile(): React.JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 30,
+    paddingHorizontal: 15,
     paddingTop: 50,
   },
   title: {
+    paddingHorizontal: 10,
     marginBottom: 50,
   },
   avatarBlock: {

@@ -1,14 +1,67 @@
-import React from 'react';
+import React, {Context, useContext, useEffect} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
+import {DataTable, Text} from 'react-native-paper';
+import {AxiosContext} from '../context/AxiosContext';
+import {IAxiosContext} from '../context/types';
+import {IPaginationResponse, IUser} from '../types';
 
 const UsersList = (): React.JSX.Element => {
+  const {authAxios} = useContext(AxiosContext as Context<IAxiosContext>);
+
+  const [items, setItems] = React.useState<IUser[]>([]);
+  const [page, setPage] = React.useState<number>(0);
+  const [totalPages, setTotalPages] = React.useState<number>(1);
+  const [totalItems, setTotalItems] = React.useState<number>(0);
+  const [pageSize, setPageSize] = React.useState<number>(10);
+
+  const from = page * pageSize;
+  const to = Math.min((page + 1) * pageSize, totalItems);
+
+  useEffect(() => {
+    authAxios.get('/admin/users', {params: {page, pageSize}}).then(response => {
+      const data = response.data as IPaginationResponse<IUser>;
+      setItems(data.data);
+      setTotalPages(data.totalPages);
+      setPageSize(data.pageSize);
+      setTotalItems(data.totalCount);
+    });
+  }, [authAxios, page, pageSize]);
+
   return (
     <>
       <ScrollView contentContainerStyle={styles.container}>
         <Text variant="headlineLarge" style={styles.title}>
           Users
         </Text>
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title style={styles.emailColumn}>Email</DataTable.Title>
+            <DataTable.Title style={styles.emailColumn}>Name</DataTable.Title>
+            <DataTable.Title>Role</DataTable.Title>
+          </DataTable.Header>
+
+          {items.map(item => (
+            <DataTable.Row key={item.id} onPress={() => console.log(item.name)}>
+              <DataTable.Cell style={styles.emailColumn}>
+                {item.email}
+              </DataTable.Cell>
+              <DataTable.Cell style={styles.emailColumn}>
+                {item.name}
+              </DataTable.Cell>
+              <DataTable.Cell>{item.role}</DataTable.Cell>
+            </DataTable.Row>
+          ))}
+
+          <DataTable.Pagination
+            page={page}
+            numberOfPages={totalPages}
+            onPageChange={setPage}
+            label={`${from + 1}-${to} of ${items.length}`}
+            numberOfItemsPerPage={pageSize}
+            onItemsPerPageChange={setPageSize}
+            showFastPaginationControls
+          />
+        </DataTable>
       </ScrollView>
     </>
   );
@@ -16,11 +69,18 @@ const UsersList = (): React.JSX.Element => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 30,
+    paddingHorizontal: 5,
     paddingTop: 50,
   },
   title: {
+    paddingHorizontal: 20,
     marginBottom: 50,
+  },
+  emailColumn: {
+    flex: 3,
+  },
+  nameColumn: {
+    flex: 2,
   },
 });
 

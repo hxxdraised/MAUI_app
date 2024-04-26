@@ -6,7 +6,16 @@ export enum FetchStatus {
 
 export type UserRole = 'SUPERADMIN' | 'ADMIN' | 'USER';
 
-interface IVpnConfigInfo {
+export interface IPaginationResponse<ResponseData> {
+  data: ResponseData[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+export interface IVpnConfigInfo {
   id: string;
   name: string;
 }
