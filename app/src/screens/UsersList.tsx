@@ -59,17 +59,17 @@ const UsersList = (): React.JSX.Element => {
             <DataTable.Cell>{item.role}</DataTable.Cell>
           </DataTable.Row>
         ))}
-
-        <DataTable.Pagination
-          page={page}
-          numberOfPages={totalPages}
-          onPageChange={setPage}
-          label={`${from + 1}-${to} of ${totalItems}`}
-          numberOfItemsPerPage={pageSize}
-          onItemsPerPageChange={setPageSize}
-          showFastPaginationControls
-        />
       </DataTable>
+      <DataTable.Pagination
+        style={styles.pagination}
+        page={page}
+        numberOfPages={totalPages}
+        onPageChange={setPage}
+        label={`${from + 1}-${to} of ${totalItems}`}
+        numberOfItemsPerPage={pageSize}
+        onItemsPerPageChange={setPageSize}
+        showFastPaginationControls
+      />
       {selectedItem && (
         <UserInfoDialog user={selectedItem} hideDialog={hideDialog} />
       )}
@@ -79,11 +79,12 @@ const UsersList = (): React.JSX.Element => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
     paddingTop: 50,
+    height: '100%',
   },
   title: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     marginBottom: 50,
   },
   emailColumn: {
@@ -91,6 +92,11 @@ const styles = StyleSheet.create({
   },
   nameColumn: {
     flex: 2,
+  },
+  pagination: {
+    position: 'absolute',
+    bottom: 15,
+    right: 0,
   },
 });
 
