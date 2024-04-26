@@ -19,7 +19,7 @@ const InfoMetric = ({
       <Text variant="titleSmall" style={{color: theme.colors.primary}}>
         {label}
       </Text>
-      <Text variant="titleLarge">{value}</Text>
+      <Text variant="bodyLarge">{value}</Text>
     </View>
   );
 };
