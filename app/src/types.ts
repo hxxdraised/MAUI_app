@@ -15,10 +15,18 @@ export interface IPaginationResponse<ResponseData> {
   hasNextPage: boolean;
   hasPrevPage: boolean;
 }
+
 export interface IVpnConfigInfo {
   id: string;
   name: string;
 }
+
+export interface IVpnConfig extends IVpnConfigInfo {
+  userId: string;
+  config: string;
+  configurationName: string;
+}
+
 export interface IUser {
   id: string;
   email: string;

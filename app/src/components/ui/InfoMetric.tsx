@@ -4,7 +4,7 @@ import {Text, useTheme} from 'react-native-paper';
 
 interface InfoMetricProps {
   label: string;
-  value: string | number;
+  value?: string | number;
   style?: StyleProp<ViewStyle>;
 }
 

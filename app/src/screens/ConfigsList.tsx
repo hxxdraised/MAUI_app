@@ -4,10 +4,14 @@ import {DataTable, Text} from 'react-native-paper';
 import {IAxiosContext} from '../context/types';
 import {AxiosContext} from '../context/AxiosContext';
 import {IPaginationResponse, IVpnConfigInfo} from '../types';
+import VpnConfigDialog from '../components/VpnConfigDialog';
 
 const ConfigsList = (): React.JSX.Element => {
   const {authAxios} = useContext(AxiosContext as Context<IAxiosContext>);
 
+  const [selectedItem, setSelectedItem] = React.useState<IVpnConfigInfo | null>(
+    null,
+  );
   const [items, setItems] = React.useState<IVpnConfigInfo[]>([]);
   const [page, setPage] = React.useState<number>(0);
   const [totalPages, setTotalPages] = React.useState<number>(1);
@@ -16,6 +20,13 @@ const ConfigsList = (): React.JSX.Element => {
 
   const from = page * pageSize;
   const to = Math.min((page + 1) * pageSize, totalItems);
+
+  const openDialog = (item: IVpnConfigInfo) => {
+    setSelectedItem(item);
+  };
+  const hideDialog = () => {
+    setSelectedItem(null);
+  };
 
   useEffect(() => {
     authAxios.get('/me/vpn').then(response => {
@@ -28,34 +39,35 @@ const ConfigsList = (): React.JSX.Element => {
   }, [authAxios]);
 
   return (
-    <>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text variant="headlineLarge" style={styles.title}>
-          My configs
-        </Text>
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>Name</DataTable.Title>
-          </DataTable.Header>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text variant="headlineLarge" style={styles.title}>
+        My configs
+      </Text>
+      <DataTable>
+        <DataTable.Header>
+          <DataTable.Title>Name</DataTable.Title>
+        </DataTable.Header>
 
-          {items.map(item => (
-            <DataTable.Row key={item.id} onPress={() => console.log(item.name)}>
-              <DataTable.Cell>{item.name}</DataTable.Cell>
-            </DataTable.Row>
-          ))}
+        {items.map(item => (
+          <DataTable.Row key={item.id} onPress={() => openDialog(item)}>
+            <DataTable.Cell>{item.name}</DataTable.Cell>
+          </DataTable.Row>
+        ))}
 
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={totalPages}
-            onPageChange={setPage}
-            label={`${from + 1}-${to} of ${items.length}`}
-            numberOfItemsPerPage={pageSize}
-            onItemsPerPageChange={setPageSize}
-            showFastPaginationControls
-          />
-        </DataTable>
-      </ScrollView>
-    </>
+        <DataTable.Pagination
+          page={page}
+          numberOfPages={totalPages}
+          onPageChange={setPage}
+          label={`${from + 1}-${to} of ${items.length}`}
+          numberOfItemsPerPage={pageSize}
+          onItemsPerPageChange={setPageSize}
+          showFastPaginationControls
+        />
+      </DataTable>
+      {selectedItem && (
+        <VpnConfigDialog config={selectedItem} hideDialog={hideDialog} />
+      )}
+    </ScrollView>
   );
 };
 
